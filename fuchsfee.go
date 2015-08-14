@@ -3,6 +3,7 @@ package main
 import "fmt"
 import "net/http"
 import "io/ioutil"
+import "encoding/json"
 // import "bytes"
 
 func main() {
@@ -29,5 +30,31 @@ func main() {
     fmt.Println("response Status:", resp.Status)
     fmt.Println("response Headers:", resp.Header)
     body, _ := ioutil.ReadAll(resp.Body)
-    fmt.Println("response Body:", string(body))
+//     fmt.Println("response Body:", string(body))
+
+    // Converting
+    //     "rows"/"value"/"title"
+//     type ArticleList struct {
+//         Rows []interface{} `json:"rows"`
+//     }
+
+
+    type Article []struct {
+        Value map[string]interface{} `json:"value"`
+    }
+
+    type ArticleList struct {
+        Rows Article `json:"rows"`
+    }
+
+    article_list := &ArticleList{}
+    if err := json.Unmarshal( body, &article_list ); err != nil {
+        panic(err)
+    }
+    fmt.Println("============================")
+    fmt.Println(article_list.Rows[0])
+    fmt.Println("============================\n")
+    fmt.Println(article_list.Rows[0].Value["title"])
+
+//     fmt.Println(article.Value["title"])
 }
