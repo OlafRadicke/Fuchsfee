@@ -10,7 +10,10 @@ die Wikipedia-Funktion "Zufälliger Artikel". Dies mal war es der Artikel:
 
 # Dokus #
 
-## Golang ##
+## Golang-Dokus ##
 
 [Umgang mit Projekt-Verzeichnissen/-Dateien](https://golang.org/doc/code.html)
 [code organization](http://pivotallabs.com/next-steps-in-go-code-organization/)
+[html/template](https://golang.org/doc/articles/wiki/#tmp_6)
+[html/template II.](http://gohugo.io/templates/go-templates/)
+[feeds](https://github.com/gorilla/feeds)
