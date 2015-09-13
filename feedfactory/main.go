@@ -57,17 +57,21 @@ func convertToFeed()(*feeds.Feed, error){
     return feed, nil
 }
 
-func GetAtom()(string){
-    var feed = convertToFeed()
+func GetAtom()(string, error){
+    var feed, err = convertToFeed()
+    if err != nil {
+        fmt.Println("Can't create feed!")
+        return "", fmt.Errorf("Can't create feed!")
+    }
     atom, _ := feed.ToAtom()
 //    fmt.Println("============================\n")
 //    fmt.Println("atom:", atom)
 //    fmt.Println("============================\n")
-    return atom
+    return atom, nil
 }
 
 func GetRss()(string){
-    var feedObject = convertToFeed()
+    var feedObject, _ = convertToFeed()
     rss, _ := feedObject.ToRss()
 //    fmt.Println("atom:", rss)
     return rss
