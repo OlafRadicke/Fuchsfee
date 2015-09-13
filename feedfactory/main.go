@@ -10,12 +10,18 @@ import (
 
 
 
-func convertToFeed()(*feeds.Feed){
+func convertToFeed()(*feeds.Feed, error){
 
 
     body, err := couchdbrest.GetLastBlogArticles("127.0.0.1", "10")
     fmt.Println("err: ", err)
-    article_list := jsonconvert.JsonToObject(body)
+
+    if err != nil {
+        fmt.Println("CouchDB rest call faild. Is database all ready running?")
+//        body := []byte{}
+        return nil, fmt.Errorf("CouchDB rest call faild. Is database all ready running?")
+    }
+    article_list, err := jsonconvert.JsonToObject(body)
     fmt.Println("============================\n")
     fmt.Println(article_list.Rows[0].Value["title"])
     fmt.Println("============================\n")
@@ -36,11 +42,11 @@ func convertToFeed()(*feeds.Feed){
         fmt.Println( "No.:" , index ,  " Value: " , element.Value["title"] )
         fmt.Println("============================\n")
 
-        article_title := element.Value["title"]
+        articleTitle := element.Value["title"]
         feed.Items = append(
             feed.Items,
             &feeds.Item{
-                Title:       article_title.(string),
+                Title:       articleTitle.(string),
                 Link:        &feeds.Link{Href: "http://jmoiron.net/blog/limiting-concurrency-in-go/"},
                 Description: "A discussion on controlled parallelism in golang",
                 Author:      &feeds.Author{"Jason Moiron", "jmoiron@jmoiron.net"},
@@ -48,21 +54,21 @@ func convertToFeed()(*feeds.Feed){
             } )
     }
 
-    return feed
+    return feed, nil
 }
 
 func GetAtom()(string){
     var feed = convertToFeed()
     atom, _ := feed.ToAtom()
-    fmt.Println("============================\n")
-    fmt.Println("atom:", atom)
-    fmt.Println("============================\n")
+//    fmt.Println("============================\n")
+//    fmt.Println("atom:", atom)
+//    fmt.Println("============================\n")
     return atom
 }
 
 func GetRss()(string){
     var feedObject = convertToFeed()
     rss, _ := feedObject.ToRss()
-    fmt.Println("atom:", rss)
+//    fmt.Println("atom:", rss)
     return rss
 }

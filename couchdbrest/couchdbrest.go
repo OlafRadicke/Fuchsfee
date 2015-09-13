@@ -8,7 +8,7 @@ import (
 )
 
 // Do a couchdb request and get back blog article as json.
-func GetLastBlogArticles( couchdb_host string, result_limit string)([]byte, int){
+func GetLastBlogArticles( couchdb_host string, result_limit string)([]byte, error){
     var string_buffer bytes.Buffer
     string_buffer.WriteString("http://")
     string_buffer.WriteString(couchdb_host)
@@ -24,7 +24,9 @@ func GetLastBlogArticles( couchdb_host string, result_limit string)([]byte, int)
     resp, err := client.Do(req)
     if err != nil {
         fmt.Println(err)
-        panic(err)
+//        panic(err)
+        body := []byte{}
+        return body, fmt.Errorf("Resr call failed.")
     }
     defer resp.Body.Close()
 
@@ -32,5 +34,5 @@ func GetLastBlogArticles( couchdb_host string, result_limit string)([]byte, int)
     fmt.Println("response Headers:", resp.Header)
     body, _ := ioutil.ReadAll(resp.Body)
 //     fmt.Println("response Body:", string(body))
-    return body, 0
+    return body, nil
 }

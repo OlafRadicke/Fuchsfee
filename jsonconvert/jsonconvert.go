@@ -18,14 +18,15 @@ type ArticleList struct {
 
 // Converting json to go objecth
 // Object hierarchy: "rows"/"value"/"title"
-func JsonToObject(json_body []byte)(*ArticleList){
+func JsonToObject(json_body []byte)(*ArticleList, error){
     article_list := &ArticleList{}
     if err := json.Unmarshal(json_body, &article_list); err != nil {
-        panic(err)
+  //      panic(err)
+        return article_list, fmt.Errorf("Rest call failed.")
     }
     fmt.Println("============================")
     fmt.Println(article_list.Rows[0])
     fmt.Println("============================\n")
     fmt.Println(article_list.Rows[0].Value["title"])
-    return article_list
+    return article_list, nil
 }
