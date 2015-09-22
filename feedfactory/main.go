@@ -6,11 +6,11 @@ import (
     "github.com/gorilla/feeds"
     "../couchdbrest"
     "../jsonconvert"
+    "../appconfig"
 )
 
 
-
-func convertToFeed()(*feeds.Feed, error){
+func convertToFeed(config appconfig.AppConfig)(*feeds.Feed, error){
 
 
     body, err := couchdbrest.GetLastBlogArticles("127.0.0.1", "10")
@@ -57,8 +57,8 @@ func convertToFeed()(*feeds.Feed, error){
     return feed, nil
 }
 
-func GetAtom()(string, error){
-    var feed, err = convertToFeed()
+func GetAtom(config appconfig.AppConfig)(string, error){
+    var feed, err = convertToFeed(config)
     if err != nil {
         fmt.Println("Can't create feed!")
         return "", fmt.Errorf("Can't create feed!")
@@ -70,8 +70,8 @@ func GetAtom()(string, error){
     return atom, nil
 }
 
-func GetRss()(string){
-    var feedObject, _ = convertToFeed()
+func GetRss(config appconfig.AppConfig)(string){
+    var feedObject, _ = convertToFeed(config)
     rss, _ := feedObject.ToRss()
 //    fmt.Println("atom:", rss)
     return rss

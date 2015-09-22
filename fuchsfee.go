@@ -4,19 +4,9 @@ import (
     "fmt"
     "net/http"
     "./feedfactory"
+    "./appconfig"
 )
 
-type AppConfig struct {
-   blogProtocol string
-   blogDomain string
-   feedPort string
-}
-
-
-func (ac AppConfig) newHandler(w http.ResponseWriter, r *http.Request) {
-    fmt.Printf("Blog domain %s\n", ac.blogDomain)
-    // fmt.Fprintf(w, feedfactory.GetRss())
-}
 
 func handler(w http.ResponseWriter, r *http.Request) {
     fmt.Fprintf(w, "Hi there, I love %s!", r.URL.Path[1:])
@@ -32,11 +22,17 @@ func atomHandler(w http.ResponseWriter, r *http.Request) {
 
 func main() {
     fmt.Printf("Hello, world.\n")
-    config := AppConfig{blogProtocol:"https://", blogDomain:"the-independent-friend.de", feedPort:"8088"}
+    config := appconfig.AppConfig{
+      BlogProtocol:"https://",
+      BlogDomain:"the-independent-friend.de",
+      FeedPort:"8088",
+      Author: "Olaf Radicke",
+      AuthorMail: "briefkasten@olaf-radicke.de",
+    }
 
-    feedfactory.GetAtom()
-    http.HandleFunc("/new.xml", config.newHandler)
+    feedfactory.GetAtom(config)
+    http.HandleFunc("/new.xml", config.NewHandler)
     http.HandleFunc("/atom.xml", atomHandler)
     http.HandleFunc("/rss.xml", rssHandler)
-    http.ListenAndServe(":" + config.feedPort, nil)
+    http.ListenAndServe(":" + config.FeedPort, nil)
 }
