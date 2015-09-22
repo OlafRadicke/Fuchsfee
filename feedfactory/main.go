@@ -32,7 +32,7 @@ func convertToFeed(config appconfig.AppConfig)(*feeds.Feed, error){
         Title:       "THE INDEPENDENT FRIEND",
         Link:        &feeds.Link{Href: "https://the-independent-friend.de/"},
         Description: "Weblog von Olaf Radicke",
-        Author:      &feeds.Author{"Olaf Radicke", "briefkasten@olaf-radicke.de"},
+        Author:      &feeds.Author{config.Author, config.AuthorMail},
         Created:     now,
     }
 
@@ -47,9 +47,9 @@ func convertToFeed(config appconfig.AppConfig)(*feeds.Feed, error){
             feed.Items,
             &feeds.Item{
                 Title:       articleTitle.(string),
-                Link:        &feeds.Link{Href: "http://jmoiron.net/blog/limiting-concurrency-in-go/"},
+                Link:        &feeds.Link{Href: config.BlogProtocol + config.BlogDomain},
                 Description: "A discussion on controlled parallelism in golang",
-                Author:      &feeds.Author{"Jason Moiron", "jmoiron@jmoiron.net"},
+                Author:      &feeds.Author{config.Author, config.AuthorMail},
                 Created:     now,
             } )
     }
